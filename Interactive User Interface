@@ -1,0 +1,104 @@
+#Milestone 3 L8-15 Date of submission: 1 December 2019
+
+
+from Cimpl import *
+from L8_15_image_filters import *
+from simple_Cimpl_filters import grayscale
+
+
+def user_interface() -> None:
+    """
+    Through the user interface, select one of the commands from the provided options. When    a filter is prompted this should display the original image as well as the altered image. This process is repeated, as the user selects different filters the effects are applied cumulatively, until the user quits the interface. However, if the user input is either not a valid option or no image is loaded before a filter is requested it will display the appropriate error.
+    
+    Quinton Tracey 101153329
+    Isaac Littlejoon 101157437
+    Natasha Nayar 101149260
+    Liam Roberton 101141853
+    """
+
+    stop_loop = False
+    
+    menu = ["S", "2", "3", "X", "T", "P", "E", "I", "V", "H"]
+    
+    while stop_loop == False:
+        print("\n L)oad image  S)ave-as\n 2)-tone  3)-tone X)treme contrast  T)int sepia  P)osterize\n\
+        E)dge detect  I)mproved edge detect  V)ertical flip H)orizontal flip\n  Q)uit \n \n")
+        
+        command = input(":<one space> ")
+        command = command.upper()  
+        
+        quit = False
+        
+        while quit == False:
+             
+            if command == "Q":
+                loaded = False
+                quit = True  
+                stop_loop = True
+                
+            elif command == "L":
+                original_image = load_image(choose_file())
+                loaded = True  
+            
+            elif command != "L" and command != "Q":
+                loaded = False
+                print("No such command")
+                print("\n L)oad image  S)ave-as\n 2)-tone  3)-tone X)treme contrast  T)int sepia  P)osterize\n E)dge detect  I)mproved edge detect  V)ertical flip H)orizontal flip\n  Q)uit \n \n")
+                
+                command = input(":<one space> ")
+                command = command.upper()             
+                
+            elif not(command in menu):
+                print(command)
+                print("No such command")
+            
+                
+            while loaded == True:    
+                
+                print("\n L)oad image  S)ave-as\n 2)-tone  3)-tone  X)treme contrast  T)int sepia  P)osterize\n E)dge detect  I)mproved edge detect  V)ertical flip H)orizontal flip\n  Q)uit \n \n")
+                
+                command = input(":<one space> ")
+                command = command.upper()             
+                
+                if command == "S":
+                    save_as(original_image)
+                    
+                elif command == "2":
+                    original_image = two_tone(original_image)[0]
+                    
+                elif command == "3":
+                    original_image = three_tone(original_image)[0]
+                    
+                elif command == "X":
+                    original_image = extreme_contrast(original_image)
+                    
+                elif command == "T":
+                    original_image = sepia(original_image)
+                    
+                elif command == "P":
+                    original_image = posterize(original_image)
+                    
+                elif command == "E":
+                    threshold_value = int(input("Enter a threshold value: "))
+                    original_image = edge_detection(original_image, threshold_value)
+                    
+                elif command == "I":
+                    threshold_value = int(input("Enter a threshold value: "))
+                    original_image = detect_edges_better(original_image, threshold_value)
+                    
+                elif command == "V":
+                    original_image = vertical_flip(original_image)
+                    
+                elif command == "H":
+                    original_image = flip_horizontal(original_image)
+                    
+                elif command == "Q":
+                    loaded = False
+                    quit = True
+                    stop_loop = True
+                    
+                else:
+                    print("No such command")
+                    
+user_interface()
+            
