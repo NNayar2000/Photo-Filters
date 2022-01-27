@@ -1,0 +1,445 @@
+#Milestone 2 L8-15  1 December 2019
+
+
+from Cimpl import  get_width, get_height, get_color, set_color, show, create_color, load_image, copy, get_color, choose_file, Image
+
+from simple_Cimpl_filters import grayscale
+
+
+ORIGINAL_IMAGE = load_image(choose_file())
+
+
+#red, green, blue channel filters
+
+
+def red_channel(FILENAME):
+    """Return a copy of the image filtered to show only the red pixels and print the value of (rbg) for each pixel. Input the colour red and the name of the jpg image in the same file as the Cimpl file to be red filtered.
+    
+    >>>red_channel()
+    Enter filename: great_big_c.jpg
+    #returns the original image and red filtered image of the copy of the original image.
+
+    Natasha Nayar 101149260
+    """
+    original_image = load_image(FILENAME)
+    
+    new_image_red = copy(original_image)
+    for pixel in original_image: #iterates through a copy of the original image, and a gets x, y coordinates and the value (r, g, b) = the red, green and blue values of the pixel at each coordinate.
+        
+        x, y, (r, g, b) = pixel
+        new_colour = create_color(r, 0, 0) #creates a new colour with only the value of the red pixel specific for each x and y coordinate.
+        set_color (new_image_red, x, y, new_colour) #changes the pixels in the copy of the original to the new colour and creates a new image
+    show(original_image) #displays the original image
+    show(new_image_red)  #displays the new image that is red_filtered
+    return new_image_red
+
+
+def green_channel(FILENAME):
+    """creates a copy of the original image FILENAME with a green filter applied ie. removes red and blue color from image
+    
+    >>> green_channel (miss_sullivan.jpg)
+    (shows original image)
+    (shows new image with green filter applied)
+    
+    Liam Roberton 101141853
+    """
+    
+    
+    original_image = load_image(FILENAME) #creates a variable that stores the data for the original image
+   
+        
+    new_green_image = copy(original_image)    
+    for pixel in original_image:   #iterates every pixel within the original image
+        x, y, (r, g, b) = pixel    #unpacks each individual pixel into their x-y coordinates as well as the rgb colour scheme for that pixel
+        new_green_color = create_color(0, g, 0) #creates a new color with only the green component
+        set_color(new_green_image, x, y, new_green_color) #changes the color of each pixel so only the green portion of rgb is present in the pixel
+        
+    show(original_image)  #shows the original image before filter has been applied
+    show(new_green_image) # shows image after filter has been applied
+    return new_green_image
+
+
+def blue_filter():
+    """ This program takes a normal image and outputs the image under a blue filter
+    >>>blue_filter()
+    select an image to filter: #great_big_c selected from files pop-up
+    #returns blue filtered copy of original image, followed by the original image
+    
+    Isaac Littlejohn 101157437
+    """
+    print('select an image to filter:')
+    filename=choose_file()
+    original_image=load_image(filename)
+    new_image_blue=copy(original_image) #copies pixel layout so that the original image can be reverted
+    for pixel in original_image:
+        x, y, (r, g, b) = pixel #a and b are the pixel locations and r,g,b are the color values for the pixel at that exact location
+        new_colour=create_color(0,0,b)#removes the red and green colour values from the image and keeps only the blue value present in the image
+        set_color (new_image_blue, x, y, new_colour) #assigned the new blue colour value to the pixel position at the copied image
+    show( new_image_blue)
+    show(original_image)
+    return new_image_blue
+
+
+#P4 starts here
+     
+            
+def not_colour_select(a) -> tuple:
+    """this function lets the user select a colour from the given list of available values.
+    >>>colour_select()
+    input a colour for one of the tones of the filter. Options include: black, white, red, lime, blue,    
+    yellow, cyan, magenta, and gray
+    #input red
+    (255,0,0)
+
+    Isaac Littlejohn 101157437
+    """
+    options=[['black',(0,0,0)],['Black',(0,0,0)],['white',(255,255,255)], ['White',(255,255,255)], ['red',(255,0,0)],[ 'Red',(255,0,0)], ['lime',(0,255,0)], ['Lime',(0,255,0)], ['blue',(0,0,255)],[ 'Blue',(0,0,255)], ['yellow',(255,255,0)], ['Yellow',(255,255,0)], ['cyan',(0,255,255)], ['Cyan',(0,255,255)], ['magenta',(255,0,255)], ['Magenta',(255,0,255)], ['gray',(128,128,128)], ['Gray',(128,128,128)]]
+    temp = 0
+    while temp != 1:
+        temp1 = 0
+        othercount1 = 0
+        while temp1 < len(options):
+            if temp1 == a:
+                a = options[temp1][1]
+                return a
+            else:
+                temp1 += 1
+                othercount1 += 1
+        if othercount1 == len(options):
+            print(" you didn't enter one of the given colours. Please try again")
+            
+            
+            
+def two_tone(ORIGINAL_IMAGE) ->(Image,tuple):
+
+    """ This program takes a normal image and outputs the image but with only two colours, the placement of which depends on the brightness of the section of the image. The program then returns the image value, followed by the rgb values of the two colours selected.
+
+    >>>two_tone()
+   #shows image with only cyan and yellow colour values
+    (<Cimpl.Image object at 0x00000228413BEA48>)
+
+    Isaac Littlejohn 101157437"""
+    new_image = copy(ORIGINAL_IMAGE) #copies pixel layout so that the original image can be   reverted
+
+    temp = 0
+    while temp != 1:
+        a = not_colour_select(13)
+        c = not_colour_select(11)
+        if a == c:
+            print("the two colours you entered were the same. Please try again with two different colours")
+        else:
+            temp = 1
+            
+    for x, y, (r, g, b) in new_image:
+        if (r+g+b)/3 >= 128:
+            (r,g,b)= a
+        elif (r+g+b)/3 < 128:
+            (r,g,b)= c       
+
+        new_colour=create_color(r,g,b)#removes the red and green colour values from the image and keeps only the blue value present in the image
+        set_color (new_image, x, y, new_colour) #assigns one of the selected colour values to the pixel position at the copied image
+
+    show( new_image)
+    show(ORIGINAL_IMAGE)
+
+    return new_image
+
+
+
+def three_tone(ORIGINAL_IMAGE: Image) -> (Image,tuple):
+
+    """ This program takes a normal image and outputs the image but with only three colours, the placement of which depends on the brightness of the section of the image. The program then returns the image value, followed by the rgb values of the three colours selected.
+
+    >>>three_tone()
+   
+    #shows the image with only cyan, magenta, and yellow colour values, followed by the original image
+    (<Cimpl.Image object at 0x0000027F354D59C8>)
+
+    Isaac Littlejohn 101157437"""    
+    new_image = copy(ORIGINAL_IMAGE) #copies pixel layout so that the original image can be reverted
+    
+    temp = 0
+    while temp != 1:
+        a = not_colour_select(13)
+        c = not_colour_select(15)
+        d = not_colour_select(11)
+        if a == c or a == d or c == d:
+            print("the two or more colours you entered were the same. Please try again with two different colours")
+        else:
+            temp = 1      
+
+    for pixel in ORIGINAL_IMAGE:
+        x, y, (r, g, b) = pixel #a and b are the pixel locations and r,g,b are the color values for the pixel at that exact location
+        if (r+g+b)/3 >= 171:
+            (r,g,b) = a
+        elif (r+g+b)/3 > 84 and (r+g+b)/3 < 171:
+            (r,g,b) = c
+        elif (r+g+b)/3 <= 84:
+            (r,g,b) = d      
+ 
+        new_colour = create_color(r,g,b)#removes the red and green colour values from the image and keeps only the blue value present in the image
+        set_color (new_image, x, y, new_colour) #assigned one of the selected colour values to the pixel position at the copied image
+
+    show( new_image)
+    show(ORIGINAL_IMAGE)
+
+    return (new_image)
+
+
+def extreme_contrast(ORIGINAL_IMAGE: Image) -> Image:
+
+    """Return the new image after the copy of the original value is filtered so that each r,g,b component of the pixel is at its maximum(255) or minimum(0). 
+    
+    >>>extreme_contrast()
+    #shows the filtered image of the copy of the original image.
+    
+    Natasha Nayar 101149260
+    """
+    new_image = copy(ORIGINAL_IMAGE)
+
+    for pixel in new_image:
+        x, y, (r, g, b) = pixel
+        if (r >= 0) and (r <= 127):
+            r = 0
+        if (g >= 0) and (g <= 127):
+            g = 0   
+        if (b >= 0) and (b <= 127):
+            b = 0    
+        elif (r >= 128) and (r <= 255):
+            r = 255
+        elif (g >= 128) and (g <= 255):
+            g = 255            
+        elif (b >= 128) and (b <= 255):
+            b = 255           
+        new_colour = create_color(r, g, b) 
+        set_color (new_image, x, y, new_colour)     
+    show(ORIGINAL_IMAGE)
+    show(new_image)
+    return new_image
+
+
+def sepia(ORIGINAL_IMAGE: Image) -> Image:
+    """adjusts the r and b values within the rgb colour scheme of the grayscale filter to apply a yellowish tint to the image.
+    
+    Liam Roberton (101141853)
+    """
+    
+    gray_image = grayscale(ORIGINAL_IMAGE)
+    new_image = copy(gray_image)
+    
+    for pixel in gray_image:
+        x, y, (r, g, b) = pixel
+        if g < 63:
+            r *= 1.1
+            b *= 0.9
+        elif (63 <= g) and (g <= 191):
+            r *= 1.15
+            b *= 0.85                
+        elif (191 < g) and (g <= 255):
+            r *= 1.08
+            b *= 0.93
+            
+        new_sepia_pixel = create_color(r, g, b)        
+        set_color(new_image, x, y, new_sepia_pixel)
+            
+    show(ORIGINAL_IMAGE) 
+    show(new_image) 
+    return new_image
+
+
+def _adjust_(value: int)-> int:
+    """
+    Any input integer will be adjusted to be in the midpoint of one of the four quadrants.
+    The quadrants are  0 to 63, 64 to 127, 128 to 191, and 192 to 255. Their midpoints are  31, 95, 159 and 223 respectively 
+    
+    >>>_adjust_(3)
+    31
+    >>>_adjust_(90)
+    95
+    >>>_adjust_(191)
+    159
+    
+    Quinton Tracey 101153329
+    """
+
+    if value <= 63:
+        value = 31
+    elif value <= 127:
+        value = 95
+    elif value <= 191:
+        value = 159
+    else: value = 223   
+    return value
+
+def posterize(ORIGINAL_IMAGE: Image) -> Image:
+
+    """
+    Select an image file and it will display the original image, than the posterized image
+    
+    Quinton Tracey 101153329
+    """
+
+    posterized_image = copy(ORIGINAL_IMAGE)
+    for pixel in ORIGINAL_IMAGE: 
+        x, y, (r, g, b) = pixel
+        new_colour = create_color(_adjust_(r), _adjust_(g), _adjust_(b)) #each rgb value is adjusted to create a posterized effect 
+        set_color (posterized_image, x, y, new_colour) 
+
+    show(ORIGINAL_IMAGE) #displays the original image
+    show(posterized_image) #displays the posterized image
+
+    return posterized_image
+
+
+#P5 functions start here
+
+
+def edge_detection(original_image: Image, threshold_value: int) -> Image:
+ 
+    """Return a filtered image showing only the black and white outlines of the original image.
+    Precondition: the threshold value has to be a positive integer.
+   
+    >>>edge_detection(ORIGINAL_IMAGE, 20)
+    #shows the original image and filtered image
+    
+    Natasha Nayar 101149260
+    """   
+    
+    new_image = copy(original_image)
+    
+    height = get_height(original_image)
+    width = get_width(original_image)
+    
+    for row in range(width):
+        for col in range(height - 1):
+            p = get_color(original_image, row, col)
+            r, g, b = p
+            q = get_color(original_image, row, col + 1)
+            r1, g1, b1 = q
+            
+            brightness_top = (r + g + b) // 3
+            brightness_bottom = (r1 + g1 + b1) // 3
+            
+            difference = brightness_top - brightness_bottom
+            absolute_difference = abs(difference) 
+            
+            if absolute_difference > int(threshold_value):
+                r = 0
+                g = 0
+                b = 0
+            else:
+                r = 255
+                g = 255
+                b = 255
+            
+            new_colour = create_color(r, g, b)
+            set_color(new_image, row, col, new_colour)
+    
+    show(original_image)
+    show(new_image)    
+            
+    return new_image
+
+
+def detect_edges_better(original_image:Image, threshold: int) -> Image:
+    """
+    Input an image and a threshold value and it will display the original image and
+    a better edge detected image
+    
+    >>>image = choose_file()
+    >>> detect_edges_better(image,20)
+    <Cimpl.Image object at 0x0000025744D12908>
+    
+    Also displays the before and after image
+    
+    Quinton Tracey 101153329
+    """
+    
+    ORIGINAL_IMAGE = load_image(image)     
+    bedgedetected_image = copy(ORIGINAL_IMAGE)
+    
+    for pixel in ORIGINAL_IMAGE: 
+        x, y, (r, g, b) = pixel
+        if y != ORIGINAL_IMAGE.get_height() - 1:
+            if x != ORIGINAL_IMAGE.get_width() - 1:
+                opc = (r + g + b) / 3 #origin pixel color average
+                right_pixel = get_color(ORIGINAL_IMAGE, x + 1,y)
+                rpc = (right_pixel[0] + right_pixel[1] + right_pixel[2])/3 #right pixel color average
+                bottom_pixel = get_color(ORIGINAL_IMAGE, x,y + 1)
+                bpc = (bottom_pixel[0] + bottom_pixel[1] + bottom_pixel[2])/3 #bottom pixel color average
+                if abs(opc - rpc) > threshold or abs(opc - bpc) > threshold: 
+                    new_color = create_color(0,0,0)
+                else: new_color = create_color(255,255,255)
+            else: pass
+        else: pass
+            
+        set_color (bedgedetected_image, x, y, new_color) 
+        
+    show(ORIGINAL_IMAGE) #displays the original image
+    show(bedgedetected_image) #displays the posterized image
+
+    return bedgedetected_image
+
+def flip_horizontal(ORIGINAL_IMAGE: Image) -> Image: 
+
+    """ Flips the original image around its x-axis to turn the image upside-down
+    Liam Roberton (101141853)
+    """
+
+    new_image = copy(ORIGINAL_IMAGE)
+    coord_x = get_width(ORIGINAL_IMAGE) 
+    coord_y = get_height(ORIGINAL_IMAGE) 
+    image = [[None] * (coord_y)] * (coord_x)#Littlejohn originally came up with this step
+
+    for i in range(coord_x):
+        image[i] = [None] * (coord_x)
+
+    for pixel in ORIGINAL_IMAGE:
+        x, y, (r, g, b) = pixel
+        image[y][x] = (r, g, b)
+
+    for pixel in ORIGINAL_IMAGE: 
+        x, y, (r, g, b) = pixel    
+        (r, g, b) = image[(coord_y - 1) - y][x]
+
+        new_colour = create_color(r, g, b)
+        set_color (new_image, x, y, new_colour)
+    
+    show(ORIGINAL_IMAGE)
+    show(new_image)
+
+    return new_image
+
+
+def vertical_flip(ORIGINAL_IMAGE: Image) -> Image: 
+    """ This function returns the image value of a selected image flipped on its vertical axis as well as showing the flipped image, followed by the original image
+
+    >>>vertical_flip(ORIGINAL_IMAGE)
+    #shows new_image
+    #shows ORIGINAL_IMAGE
+    <Cimpl.Image object at 0x000002B59F113148> #new_image value
+
+    Isaac Littlejohn 101157437"""
+
+    new_image = copy(ORIGINAL_IMAGE) #copies pixel layout so that the original image can be reverted
+    countx = get_width(ORIGINAL_IMAGE)
+    county = get_height(ORIGINAL_IMAGE)
+    pixel_values = [[None]*(county)]*(countx)
+
+    for i in range(countx):
+        pixel_values[i] = [None]*(countx)#creating an 2-D list with a location for every pixel in the image
+
+    for pixel in ORIGINAL_IMAGE:#initializing every value in the 2-D list to its pixel counterpart
+        x,y,(r,g,b) = pixel
+        pixel_values[y][x] = (r,g,b)
+
+    for pixel in ORIGINAL_IMAGE: 
+        x,y,(r,g,b) = pixel
+        (r,g,b) = pixel_values[y][(countx-1)-x] #sets r,g and b values equal to the ones equal distance from the other side of the image
+        new_colour = create_color(r,g,b)#removes the red and green colour values from the image and keeps only the blue value present in the image
+        set_color (new_image, x, y, new_colour)#assigned one of the selected colour values to the pixel position at the copied image
+
+    show( new_image)
+    show(ORIGINAL_IMAGE)
+
+    return new_image
