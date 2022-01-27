@@ -121,12 +121,6 @@ def test_grayscale() -> None:
     
     print('PASS')
 
-# Exercise 1 (easy):
-# How can we modify test_grayscale so that it visits every pixel in the image,
-# checking if each one is a shade of gray?
-#
-# Exercise 2 (more challenging)
-# How can we modify test_grayscale so that it visits every pixel in the image,
-# checking if grayscale calculated the correct shade of gray for the pixel?
+
 
     
